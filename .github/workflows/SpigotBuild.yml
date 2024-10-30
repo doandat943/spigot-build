@@ -62,7 +62,7 @@ jobs:
         distribution: 'temurin'
         
     - name: Build Spigot version with Java 21
-      run: bash ./build.sh JAVA21
+      run: python -v
       working-directory: buildtool
       
     - name: Set up JDK 17
