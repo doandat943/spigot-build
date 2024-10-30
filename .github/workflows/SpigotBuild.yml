@@ -52,6 +52,7 @@ jobs:
       run: |
         wget https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar -O BuildTools.jar
         mkdir -p output
+        chmod +x ./build.sh
       working-directory: buildtool
         
     - name: Set up JDK 21
