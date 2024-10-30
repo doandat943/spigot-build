@@ -35,7 +35,7 @@ get_version_map() {
             if [ "$minor" -ne 0 ]; then
                 version="$version.$minor"
             fi
-            echo -n " [${version}](https://github.com/BaldGang/spigot-build/releases/download/${tag}/$file) |"
+            echo -n " [${version}](https://github.com/doandat943/spigot-build/releases/download/${tag}/$file) |"
         done
         for ((i=0; i<longest-$(printf "%s\n" "${!version_map[@]}" | grep "^$major," | wc -l); i++)); do
             echo -n " |"
