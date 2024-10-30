@@ -8,20 +8,10 @@ classify_java_version() {
 
     if ((major == 1 && minor < 17)); then
         echo "JAVA8"
-    elif ((major == 1 && minor >= 17 && minor < 21)); then
-        if [ -z "$patch" ]; then
-            echo "JAVA17"
-        elif ((patch < 5)); then
-            echo "JAVA17"
-        else
-            echo "JAVA21"
-        fi
-    elif ((major == 1 && minor == 20 && patch >= 5)); then
+    elif ((major == 1 && minor >= 17 && minor < 20)); then
+        echo "JAVA17"
+    elif ((major == 1 && minor >= 20)); then
         echo "JAVA21"
-    elif ((major == 1 && minor > 20)); then
-        echo "JAVA21"
-    else
-        echo "UNKNOWN"
     fi
 }
 
