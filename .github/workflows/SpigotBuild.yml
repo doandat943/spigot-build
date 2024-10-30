@@ -61,7 +61,7 @@ jobs:
         distribution: 'temurin'
         
     - name: Build new version Spigot
-      run: build.sh JAVA21
+      run: ./build.sh JAVA21
       working-directory: buildtool
       
     - name: Set up JDK 17
@@ -71,7 +71,7 @@ jobs:
         distribution: 'temurin'
         
     - name: Build legacy version Spigot with Java 17
-      run: build.sh JAVA17
+      run: ./build.sh JAVA17
       working-directory: buildtool
       
     - name: Set up JDK 8
@@ -81,7 +81,7 @@ jobs:
         distribution: 'temurin'
         
     - name: Build legacy version Spigot with Java 8
-      run: build.sh JAVA8
+      run: ./build.sh JAVA8
       working-directory: buildtool
       
     - name: Copy build output
