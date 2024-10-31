@@ -4,8 +4,6 @@ on:
   schedule:
     - cron: "0 0 */4 * *"
   workflow_dispatch:
-  push:
-
 
 permissions:
   contents: write
@@ -13,6 +11,9 @@ permissions:
 jobs:
   get-versions:
     runs-on: ubuntu-latest
+    outputs:
+      date: ${{ steps.set_date.outputs.date }}
+      versions: ${{ steps.get_versions.outputs.versions }}
     steps:
       - name: Set date build
         id: set_date
@@ -36,8 +37,6 @@ jobs:
         run: |
           chmod +x README.sh
           ./README.sh
-          echo ${{ needs.get-versions.outputs.date }}
-          echo "test"
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
