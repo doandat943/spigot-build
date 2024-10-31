@@ -1,6 +1,6 @@
 #!/bin/bash
 
-versions=($(curl -L -s https://joverse.us/spigot | grep -oP '(?<=href=")[^"]*' | grep -E '^[0-9]+\.[0-9]+(\.[0-9]+)?' | sed 's/.json//'))
+versions=($(curl -L -s https://joverse.us/spigot | grep -oP '(?<=href=")[^"]*' | grep -E '^[0-9]+\.[0-9]+(\.[0-9]+)?' | grep -v '-' | sed 's/.json//' | sort -V))
 
 classify_java_version() {
     version="$1"
@@ -15,9 +15,74 @@ classify_java_version() {
     fi
 }
 
+generate_readme() {
+    declare -A version_families
+    declare -A version_count
+
+    for version in "${versions[@]}"; do
+        IFS='.' read -r major minor patch <<<"$version"
+        family="${major}.${minor}"
+        version_families["$family"]+="$version "
+        ((version_count["$family"]++))
+    done
+
+    max_versions=0
+    for count in "${version_count[@]}"; do
+        if (( count > max_versions )); then
+            max_versions=$count
+        fi
+    done
+
+    header="| Version Family |"
+    for ((i=0; i<max_versions; i++)); do
+        header+=" |"
+    done
+    echo "$header" > README.md
+
+    separator="|:---:"
+    for ((i=0; i<max_versions; i++)); do
+        separator+="|---:"
+    done
+    separator+="|"
+    echo "$separator" >> README.md
+
+    for family in $(echo "${!version_families[@]}" | tr ' ' '\n' | sort -V -r); do
+        echo -n "| $family " >> README.md
+        
+        versions_in_family=(${version_families["$family"]})
+        count=0
+        for version in "${versions_in_family[@]}"; do
+            echo -n "| [${version}](https://github.com/doandat943/spigot-build/releases/download/20241028/spigot-${version}.jar) " >> README.md
+            ((count++))
+        done
+
+        while ((count < max_versions)); do
+            echo -n "| " >> README.md
+            ((count++))
+        done
+
+        echo "|" >> README.md
+    done
+}
+
 for version in $(printf "%s\n" "${versions[@]}" | sort -V); do
     classification=$(classify_java_version "$version")
-    if [[ "$classification" == "$1" ]]; then
+
+    # Check if the classification matches the available Java versions
+    if [[ "$classification" == "JAVA8" && -d "$JAVA_HOME_8" ]]; then
+        export JAVA_HOME="$JAVA_HOME_8"
+    elif [[ "$classification" == "JAVA17" && -d "$JAVA_HOME_17" ]]; then
+        export JAVA_HOME="$JAVA_HOME_17"
+    elif [[ "$classification" == "JAVA21" && -d "$JAVA_HOME_21" ]]; then
+        export JAVA_HOME="$JAVA_HOME_21"
+    fi
+
+    # Check if JAVA_HOME is set and run the build command
+    if [[ -n "$JAVA_HOME" ]]; then
+        export PATH="$JAVA_HOME/bin:$PATH"
+        echo "Using Java at $JAVA_HOME for version $version"
         java -jar BuildTools.jar --rev "$version" --output-dir output
     fi
 done
+
+generate_readme
