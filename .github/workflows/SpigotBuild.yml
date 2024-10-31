@@ -25,7 +25,7 @@ jobs:
         id: get_versions
         run: |
           versions="['1.20.4', '1.17']"
-          echo "versions=${versions}" >> $GITHUB_OUTPUT
+          echo "versions=$(jq -cr '@json' <<< "${versions}")" >> $GITHUB_OUTPUT
 
   push-readme:
     runs-on: ubuntu-latest
