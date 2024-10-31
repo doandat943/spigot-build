@@ -51,7 +51,7 @@ jobs:
     needs: get-versions
     strategy:
       matrix:
-        version: [ 1.17 ]
+        version: ${{ needs.get-versions.outputs.versions }}
 
     steps:
       - name: Set environment variable
