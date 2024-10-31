@@ -2,7 +2,7 @@
 
 versions=($(curl -L -s https://joverse.us/spigot | grep -oP '(?<=href=")[^"]*' | grep -E '^[0-9]+\.[0-9]+(\.[0-9]+)?' | grep -v '-' | sed 's/.json//' | sort -V))
 
-echo versions
+echo $versions
 
 classify_java_version() {
     version="$1"
