@@ -30,40 +30,40 @@ generate_readme() {
 
     max_versions=0
     for count in "${version_count[@]}"; do
-        if (( count > max_versions )); then
+        if ((count > max_versions)); then
             max_versions=$count
         fi
     done
 
     header="| Version Family |"
-    for ((i=0; i<max_versions; i++)); do
+    for ((i = 0; i < max_versions; i++)); do
         header+=" |"
     done
-    echo "$header" > output/README.md
+    echo "$header" >output/README.md
 
     separator="|:---:"
-    for ((i=0; i<max_versions; i++)); do
+    for ((i = 0; i < max_versions; i++)); do
         separator+="|---:"
     done
     separator+="|"
-    echo "$separator" >> output/README.md
+    echo "$separator" >>output/README.md
 
     for family in $(echo "${!version_families[@]}" | tr ' ' '\n' | sort -V -r); do
-        echo -n "| $family " >> output/README.md
-        
+        echo -n "| $family " >>output/README.md
+
         versions_in_family=(${version_families["$family"]})
         count=0
         for version in "${versions_in_family[@]}"; do
-            echo -n "| [${version}](https://github.com/doandat943/spigot-build/releases/download/20241028/spigot-${version}.jar) " >> output/README.md
+            echo -n "| [${version}](https://github.com/doandat943/spigot-build/releases/download/20241028/spigot-${version}.jar) " >>output/README.md
             ((count++))
         done
 
         while ((count < max_versions)); do
-            echo -n "| " >> output/README.md
+            echo -n "| " >>output/README.md
             ((count++))
         done
 
-        echo "|" >> output/README.md
+        echo "|" >>output/README.md
     done
 }
 
