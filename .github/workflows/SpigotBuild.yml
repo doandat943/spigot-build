@@ -28,7 +28,7 @@ jobs:
     needs: get-versions
     strategy:
       matrix:
-        version: [ needs.get-versions.outputs.versions ]
+        version: [ env.versions ]
 
     steps:
       - name: Checkout repository
