@@ -25,8 +25,16 @@ jobs:
 
       - name: Generate README.md
         run: |
+          echo "date=$(date +%Y.%m.%d)" >> $GITHUB_ENV
           chmod +x README.sh
           ./README.sh
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+            name: ${{ env.date }}
+            tag_name: ${{ env.date }}
+            body_path: README.md
 
   build:
     runs-on: ubuntu-latest
@@ -39,7 +47,6 @@ jobs:
 
       - name: Set environment variable
         run: |
-          echo "date=$(date +%Y.%m.%d)" >> $GITHUB_ENV
           IFS='.' read -r major minor patch <<<"${{ matrix.version }}"
       
           if ((major == 1 && minor < 17)); then
@@ -85,7 +92,6 @@ jobs:
         run: |
           wget https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar -O BuildTools.jar
           mkdir -p output
-          chmod +x ./build.sh
 
       - name: Build Spigot version
         run: |
