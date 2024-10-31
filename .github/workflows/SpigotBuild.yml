@@ -21,8 +21,6 @@ jobs:
         id: get-versions
         run: |
           versions=$(curl -L -s https://joverse.us/spigot | grep -oP '(?<=href=")[^"]*' | grep -E '^[0-9]+\.[0-9]+(\.[0-9]+)?' | grep -v '-' | sed 's/.json//' | sort -V | paste -sd ',')
-          echo "$version"
-          echo "none"
           echo "versions=${versions}" >> $GITHUB_ENV
 
   build:
@@ -30,7 +28,7 @@ jobs:
     needs: get-versions
     strategy:
       matrix:
-        version: ${{ fromJson(needs.get-versions.outputs.versions) }}
+        version: [ needs.get-versions.outputs.versions ]
 
     steps:
       - name: Checkout repository
