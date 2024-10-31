@@ -20,7 +20,7 @@ jobs:
       - name: Fetch versions
         id: get-versions
         run: |
-          versions=[1.10.2, 1.17.1, 1.20.2]
+          versions="[1.10.2, 1.17.1, 1.20.2]"
           echo "::set-output name=versions::${versions}"
 
       - name: Generate README.md
