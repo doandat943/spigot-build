@@ -11,6 +11,8 @@ permissions:
 jobs:
   get-versions:
     runs-on: ubuntu-latest
+    outputs:
+      versions: ${{ steps.get-versions.outputs.versions }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -18,8 +20,8 @@ jobs:
       - name: Fetch versions
         id: get-versions
         run: |
-          versions=$(curl -L -s https://joverse.us/spigot | grep -oP '(?<=href=")[^"]*' | grep -E '^[0-9]+\.[0-9]+(\.[0-9]+)?' | grep -v '-' | sed 's/.json//' | sort -V | paste -sd ',')
-          echo "versions=[${versions}]" >> $GITHUB_ENV
+          versions=[$(curl -L -s https://joverse.us/spigot | grep -oP '(?<=href=")[^"]*' | grep -E '^[0-9]+\.[0-9]+(\.[0-9]+)?' | grep -v '-' | sed 's/.json//' | sort -V | paste -sd ',')]
+          echo "::set-output name=versions::${versions}"
 
       - name: Generate README.md
         run: |
@@ -31,15 +33,14 @@ jobs:
     needs: get-versions
     strategy:
       matrix:
-        version: ${{ env.versions }}
+        version: ${{ needs.get-versions.outputs.versions }}
 
     steps:
 
       - name: Set environment variable
         run: |
           echo "date=$(date +%Y.%m.%d)" >> $GITHUB_ENV
-          version="1.18.0"  # replace this with your actual version input
-          IFS='.' read -r major minor patch <<<"$version"
+          IFS='.' read -r major minor patch <<<"${{ matrix.version }}"
       
           if ((major == 1 && minor < 17)); then
               echo "java=11" >> $GITHUB_ENV
