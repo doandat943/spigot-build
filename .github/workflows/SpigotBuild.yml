@@ -51,7 +51,7 @@ jobs:
       - name: Set environment variable
         run: |
           java=$(curl -L -s "https://hub.spigotmc.org/versions/${{ matrix.version }}.json" | jq -r '.javaVersions[0]')
-          if [ -n "$java" ]; then
+          if [ "$java" == "null" ]; then
             java=$((java - 44))
           else
             java=8

@@ -7,12 +7,12 @@ for version in "${versions[@]}"; do
     IFS='.' read -r major minor patch <<<"$version"
     family="${major}.${minor}"
     version_families["$family"]+="$version "
-    ((version_count["$family"]++))
+    version_count["$family"]=$((version_count["$family"] + 1))
 done
 
 max_versions=0
 for count in "${version_count[@]}"; do
-    if ((count > max_versions)); then
+    if [ "$count" -gt "$max_versions" ]; then
         max_versions=$count
     fi
 done
@@ -37,12 +37,12 @@ for family in $(echo "${!version_families[@]}" | tr ' ' '\n' | sort -V -r); do
     count=0
     for version in "${versions_in_family[@]}"; do
         echo -n "| [${version}](https://github.com/doandat943/spigot-build/releases/download/20241028/spigot-${version}.jar) " >>README.md
-        ((count++))
+        count=$((count + 1))
     done
 
-    while ((count < max_versions)); do
+    while [ "$count" -lt "$max_versions" ]; do
         echo -n "| " >>README.md
-        ((count++))
+        count=$((count + 1))
     done
 
     echo "|" >>README.md
