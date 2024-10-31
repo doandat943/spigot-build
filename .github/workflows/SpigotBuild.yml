@@ -19,7 +19,7 @@ jobs:
         
     - name: Set environment variable
       run: |
-        echo "date=$(date +%Y.%m.%d)" >> $GITHUB_ENV
+        echo "date=$(date +%Y%m%d)" >> $GITHUB_ENV
       
     - name: Restore cache .m2 folder
       uses: actions/cache/restore@v4
