@@ -39,31 +39,31 @@ generate_readme() {
     for ((i = 0; i < max_versions; i++)); do
         header+=" |"
     done
-    echo "$header" >output/README.md
+    echo "$header" >README.md
 
     separator="|:---:"
     for ((i = 0; i < max_versions; i++)); do
         separator+="|---:"
     done
     separator+="|"
-    echo "$separator" >>output/README.md
+    echo "$separator" >>README.md
 
     for family in $(echo "${!version_families[@]}" | tr ' ' '\n' | sort -V -r); do
-        echo -n "| $family " >>output/README.md
+        echo -n "| $family " >>README.md
 
         versions_in_family=(${version_families["$family"]})
         count=0
         for version in "${versions_in_family[@]}"; do
-            echo -n "| [${version}](https://github.com/doandat943/spigot-build/releases/download/20241028/spigot-${version}.jar) " >>output/README.md
+            echo -n "| [${version}](https://github.com/doandat943/spigot-build/releases/download/20241028/spigot-${version}.jar) " >>README.md
             ((count++))
         done
 
         while ((count < max_versions)); do
-            echo -n "| " >>output/README.md
+            echo -n "| " >>README.md
             ((count++))
         done
 
-        echo "|" >>output/README.md
+        echo "|" >>README.md
     done
 }
 
