@@ -60,7 +60,7 @@ jobs:
 
           IFS='.' read -r major minor patch <<<"${{ matrix.version }}"
 
-          java=$(curl -L -s "https://hub.spigotmc.org/versions/1.17.json" | jq -r '.javaVersions[0]')
+          java=$(curl -L -s "https://hub.spigotmc.org/versions/${{ matrix.version }}.json" | jq -r '.javaVersions[0]')
           echo "java=$((java - 44))" >> $GITHUB_ENV
 
       - name: Set up JDK
