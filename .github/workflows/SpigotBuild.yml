@@ -51,7 +51,13 @@ jobs:
       - name: Set environment variable
         run: |
           java=$(curl -L -s "https://hub.spigotmc.org/versions/${{ matrix.version }}.json" | jq -r '.javaVersions[0]')
-          echo "java=$((java - 44))" >> $GITHUB_ENV
+          if [ -n "$java" ]; then
+            java=$((java - 44))
+          else
+            java=8
+          fi
+
+          echo "java=$java" >> $GITHUB_ENV
 
       - name: Set up JDK
         uses: actions/setup-java@v4
