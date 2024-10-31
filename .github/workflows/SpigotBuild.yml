@@ -20,8 +20,9 @@ jobs:
       - name: Fetch versions
         id: get-versions
         run: |
-          versions=$(curl -L -s https://joverse.us/spigot | grep -oP '(?<=href=")[^"]*' | grep -E '^[0-9]+\.[0-9]+(\.[0-9]+)?' | grep -v '-' | sed 's/.json//' | sort -V | paste -sd ',')
-          echo "::set-output name=versions::${versions}"
+          versions=$(curl -L -s https://joverse.us/spigot | grep -oP '(?<=href=")[^"]*' | grep -E '^[0-9]+\.[0-9]+(\.[0-9]+)?' | grep -v '-' | sed 's/.json//' | sort -V | tr '\n' ',')
+          versions=${versions%,} # Loại bỏ dấu phẩy ở cuối
+          echo "::set-output name=versions::[${versions}]"
 
   build:
     runs-on: ubuntu-latest
