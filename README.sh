@@ -36,7 +36,7 @@ for family in $(echo "${!version_families[@]}" | tr ' ' '\n' | sort -V -r); do
     versions_in_family=(${version_families["$family"]})
     count=0
     for version in "${versions_in_family[@]}"; do
-        echo -n "| [${version}](https://github.com/doandat943/spigot-build/releases/download/20241028/spigot-${version}.jar) " >>README.md
+        echo -n "| [${version}](https://github.com/doandat943/spigot-build/releases/download/Spigot/spigot-${version}.jar) " >>README.md
         count=$((count + 1))
     done
 
