@@ -52,7 +52,7 @@ jobs:
     needs: push-readme
     strategy:
       matrix:
-        version: ${{ needs.get-versions.outputs.versions }}
+        version: ${{ fromJSON(needs.get-versions.outputs.versions) }}
 
     steps:
       - name: Set environment variable
