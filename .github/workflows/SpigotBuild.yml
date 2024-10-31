@@ -88,7 +88,7 @@ jobs:
       with:
         name: ${{ env.date }}
         tag_name: ${{ env.date }}
-        target_commitish: main
+        target_commitish: release
         files: output/*.jar
         body_path: output/README.md
         
