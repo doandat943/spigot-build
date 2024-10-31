@@ -52,9 +52,9 @@ jobs:
         run: |
           java=$(curl -L -s "https://hub.spigotmc.org/versions/${{ matrix.version }}.json" | jq -r '.javaVersions[0]')
           if [ "$java" == "null" ]; then
-            java=$((java - 44))
-          else
             java=8
+          else
+            java=$((java - 44))
           fi
 
           echo "java=$java" >> $GITHUB_ENV
