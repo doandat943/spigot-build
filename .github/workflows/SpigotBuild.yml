@@ -52,7 +52,7 @@ jobs:
     needs: get-versions
     strategy:
       matrix:
-        version: [${{ fromJson(needs.get_versions.outputs.versions) }}]
+        version: ${{ fromJson('[' + needs.get_versions.outputs.versions + ']') }}
 
     steps:
       - name: Set environment variable
