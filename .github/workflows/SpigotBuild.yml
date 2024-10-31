@@ -70,23 +70,15 @@ jobs:
           chmod +x ./build.sh
 
       - name: Set up JDK
-        run: |
-          classification=$(echo "${{ matrix.version }}" | awk -F: '{print $2}')
-          if [[ "$classification" == "JAVA8" ]]; then
-            echo "Using JDK 8"
-            echo "JAVA_HOME=/path/to/jdk8" >> $GITHUB_ENV
-          elif [[ "$classification" == "JAVA17" ]]; then
-            echo "Using JDK 17"
-            echo "JAVA_HOME=/path/to/jdk17" >> $GITHUB_ENV
-          elif [[ "$classification" == "JAVA21" ]]; then
-            echo "Using JDK 21"
-            echo "JAVA_HOME=/path/to/jdk21" >> $GITHUB_ENV
-          fi
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ fromJson(needs.get-versions.outputs.versions)[0] }}
+          distribution: "temurin"
 
       - name: Build Spigot version
         run: |
           version=$(echo "${{ matrix.version }}" | awk -F: '{print $1}')
-          ./build.sh "$version"
+          java -jar BuildTools.jar --rev "$version" --output-dir output
 
       - name: Create Release
         uses: softprops/action-gh-release@v2

@@ -69,9 +69,7 @@ generate_readme() {
 
 for version in $(printf "%s\n" "${versions[@]}" | sort -V); do
     classification=$(classify_java_version "$version")
-    if [[ "$classification" == "$1" ]]; then
-        java -jar BuildTools.jar --rev "$version" --output-dir output
-    fi
+    echo "$version:$classification"
 done
 
 generate_readme
