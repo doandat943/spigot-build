@@ -24,7 +24,7 @@ jobs:
       - name: Fetch versions
         id: get_versions
         run: |
-          versions="[ 1.17 ]"
+          versions="['1.20.4', '1.17']"
           echo "versions=${versions}" >> $GITHUB_OUTPUT
 
   push-readme:
