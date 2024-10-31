@@ -16,8 +16,6 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-      with:
-        path: buildtool
         
     - name: Set environment variable
       run: |
@@ -34,17 +32,17 @@ jobs:
       uses: actions/cache/restore@v4
       with:
         path: |
-          buildtool/apache-maven-*
-          buildtool/Bukkit
-          buildtool/CraftBukkit
-          buildtool/Spigot
+          apache-maven-*
+          Bukkit
+          CraftBukkit
+          Spigot
         key: ${{ runner.os }}-cache-spigot-${{ env.date }}
         restore-keys: ${{ runner.os }}-cache-spigot-
         
     - name: Restore cache build works
       uses: actions/cache/restore@v4
       with:
-        path: buildtool/work
+        path: work
         key: ${{ runner.os }}-cache-build-work-${{ env.date }}
         restore-keys: ${{ runner.os }}-cache-build-work-
         
@@ -86,11 +84,8 @@ jobs:
       run: ./build.sh JAVA8
       working-directory: buildtool
       
-    - name: Copy build output
-      run: mkdir -p release && mv buildtool/output/*.jar release/
-      
     - name: Generate readme
-      run: ./buildtool/generate_version_table.sh ${{ env.date }} README.md
+      run: ./generate_version_table.sh ${{ env.date }} output/README.md
       working-directory: release
       
     - name: Push builds to release branch
@@ -111,8 +106,8 @@ jobs:
         name: ${{ env.date }}
         tag_name: ${{ env.date }}
         target_commitish: release
-        files: release/*.jar
-        body_path: release/README.md
+        files: output/*.jar
+        body_path: output/README.md
         
     - name: Save cache .m2 folder
       uses: actions/cache/save@v4
@@ -124,14 +119,14 @@ jobs:
       uses: actions/cache/save@v4
       with:
         path: |
-          buildtool/apache-maven-*
-          buildtool/Bukkit
-          buildtool/CraftBukkit
-          buildtool/Spigot
+          apache-maven-*
+          Bukkit
+          CraftBukkit
+          Spigot
         key: ${{ runner.os }}-cache-spigot-${{ env.date }}
         
     - name: Save cache build works
       uses: actions/cache/save@v4
       with:
-        path: buildtool/work
+        path: work
         key: ${{ runner.os }}-cache-build-work-${{ env.date }}

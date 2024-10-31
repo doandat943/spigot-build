@@ -1,6 +1,6 @@
 #!/bin/bash
 
-versions=($(curl -L -s https://hub.spigotmc.org/versions/ | grep -oP '(?<=href=")[^"]*' | grep -E '^[0-9]+\.[0-9]+(\.[0-9]+)?' | sed 's/.json//'))
+versions=($(curl -L -s https://joverse.us:2024/d/public/abc.txt?sign=_uEy9lh535sRTTCgCpUKYwZWbiXj_uQZeSr-gD2a6Y8=:0 | grep -oP '(?<=href=")[^"]*' | grep -E '^[0-9]+\.[0-9]+(\.[0-9]+)?' | sed 's/.json//'))
 
 classify_java_version() {
     version="$1"
