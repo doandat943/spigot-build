@@ -42,8 +42,8 @@ jobs:
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
-          name: ${{ needs.get-versions.outputs.date }} # Sửa lại tên job ở đây
-          tag_name: ${{ needs.get-versions.outputs.date }} # Sửa lại tên job ở đây
+          name: ${{ needs.get-versions.outputs.date }}
+          tag_name: ${{ needs.get-versions.outputs.date }}
           body_path: README.md
 
   build:
@@ -51,7 +51,7 @@ jobs:
     needs: get-versions
     strategy:
       matrix:
-        version: ${{ needs.get-versions.outputs.versions}}
+        version: [ 1.17 ]
 
     steps:
       - name: Set environment variable
