@@ -22,7 +22,6 @@ jobs:
         run: |
           versions=$(bash build.sh)
           echo "versions=${versions}" >> $GITHUB_ENV
-          echo "::set-output name=versions::${versions}"
 
   build:
     runs-on: ubuntu-latest
