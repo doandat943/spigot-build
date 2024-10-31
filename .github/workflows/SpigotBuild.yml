@@ -4,6 +4,8 @@ on:
   schedule:
     - cron: "0 0 */4 * *"
   workflow_dispatch:
+  push:
+
 
 permissions:
   contents: write
@@ -34,6 +36,8 @@ jobs:
         run: |
           chmod +x README.sh
           ./README.sh
+          echo ${{ needs.get-versions.outputs.date }}
+          echo "test"
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
