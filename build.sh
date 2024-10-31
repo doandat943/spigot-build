@@ -72,11 +72,11 @@ for version in $(printf "%s\n" "${versions[@]}" | sort -V); do
 
     # Check if the classification matches the available Java versions
     if [[ "$classification" == "JAVA8" && -d "$JAVA_HOME_8" ]]; then
-        export JAVA_HOME="$JAVA_HOME_8"
+        export JAVA_HOME="$JAVA_HOME_21_X64"
     elif [[ "$classification" == "JAVA17" && -d "$JAVA_HOME_17" ]]; then
-        export JAVA_HOME="$JAVA_HOME_17"
+        export JAVA_HOME="$JAVA_HOME_17_X64"
     elif [[ "$classification" == "JAVA21" && -d "$JAVA_HOME_21" ]]; then
-        export JAVA_HOME="$JAVA_HOME_21"
+        export JAVA_HOME="$JAVA_HOME_21_X64"
     fi
 
     # Check if JAVA_HOME is set and run the build command
