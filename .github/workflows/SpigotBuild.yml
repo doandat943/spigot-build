@@ -24,8 +24,9 @@ jobs:
       - name: Fetch versions
         id: get_versions
         run: |
-          versions=$(curl -L -s https://joverse.us/spigot | grep -oP '(?<=href=")[^"]*' | grep -E '^[0-9]+\.[0-9]+(\.[0-9]+)?' | grep -v '-' | sed 's/.json//' | sort -V | awk '{printf "\"%s\", ", $0}' | sed 's/, $//' | awk '{print "[" $0 "]"}')
-          echo "versions=$(jq -cr '@json' <<< "${versions}")" >> $GITHUB_OUTPUT
+          versions=$(curl -L -s https://joverse.us/spigot | grep -oP '(?<=href=")[^"]*' | grep -E '^[0-9]+\.[0-9]+(\.[0-9]+)?' | grep -v '-' | sed 's/.json//' | sort -V | awk '{printf "%s,", $0}' | sed 's/,$//')
+          echo "versions=${versions}" >> $GITHUB_OUTPUT
+
 
   push-readme:
     runs-on: ubuntu-latest
@@ -51,7 +52,7 @@ jobs:
     needs: get-versions
     strategy:
       matrix:
-        version: ${{ needs.get-versions.outputs.versions }}
+        version: [${{ fromJson(needs.get_versions.outputs.versions) }}]
 
     steps:
       - name: Set environment variable
