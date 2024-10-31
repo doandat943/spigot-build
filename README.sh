@@ -25,7 +25,7 @@ echo "$header" >README.md
 
 separator="|:---:"
 for ((i = 0; i < max_versions; i++)); do
-    separator+="|---:"
+    separator+="|:---:"
 done
 separator+="|"
 echo "$separator" >>README.md

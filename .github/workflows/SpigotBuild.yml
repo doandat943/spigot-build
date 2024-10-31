@@ -13,14 +13,8 @@ jobs:
   get-versions:
     runs-on: ubuntu-latest
     outputs:
-      date: ${{ steps.set_date.outputs.date }}
       versions: ${{ steps.get_versions.outputs.versions }}
     steps:
-      - name: Set date build
-        id: set_date
-        run: |
-          echo "date=$(date +%Y.%m.%d)" >> $GITHUB_OUTPUT
-
       - name: Fetch versions
         id: get_versions
         run: |
@@ -42,8 +36,8 @@ jobs:
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
-          name: ${{ needs.get-versions.outputs.date }}
-          tag_name: ${{ needs.get-versions.outputs.date }}
+          name: Spigot
+          tag_name: Spigot
           body_path: README.md
 
   build:
@@ -56,10 +50,6 @@ jobs:
     steps:
       - name: Set environment variable
         run: |
-          echo "date=${{ needs.get-versions.outputs.date}}" >> $GITHUB_ENV
-
-          IFS='.' read -r major minor patch <<<"${{ matrix.version }}"
-
           java=$(curl -L -s "https://hub.spigotmc.org/versions/${{ matrix.version }}.json" | jq -r '.javaVersions[0]')
           echo "java=$((java - 44))" >> $GITHUB_ENV
 
@@ -73,7 +63,7 @@ jobs:
         uses: actions/cache/restore@v4
         with:
           path: ~/.m2/repository
-          key: ${{ runner.os }}-cache-maven-${{ env.date }}
+          key: ${{ runner.os }}-cache-maven-
           restore-keys: ${{ runner.os }}-cache-maven-
 
       - name: Restore cache Spigot repos
@@ -84,14 +74,14 @@ jobs:
             Bukkit
             CraftBukkit
             Spigot
-          key: ${{ runner.os }}-cache-spigot-${{ env.date }}
+          key: ${{ runner.os }}-cache-spigot-
           restore-keys: ${{ runner.os }}-cache-spigot-
 
       - name: Restore cache build works
         uses: actions/cache/restore@v4
         with:
           path: work
-          key: ${{ runner.os }}-cache-build-work-${{ env.date }}
+          key: ${{ runner.os }}-cache-build-work-
           restore-keys: ${{ runner.os }}-cache-build-work-
 
       - name: Set up BuildTool
@@ -106,15 +96,15 @@ jobs:
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
-          name: ${{ env.date }}
-          tag_name: ${{ env.date }}
+          name: Spigot
+          tag_name: Spigot
           files: output/*.jar
 
       - name: Save cache .m2 folder
         uses: actions/cache/save@v4
         with:
           path: ~/.m2/repository
-          key: ${{ runner.os }}-cache-maven-${{ env.date }}
+          key: ${{ runner.os }}-cache-maven-
 
       - name: Save cache Spigot repos
         uses: actions/cache/save@v4
@@ -124,10 +114,10 @@ jobs:
             Bukkit
             CraftBukkit
             Spigot
-          key: ${{ runner.os }}-cache-spigot-${{ env.date }}
+          key: ${{ runner.os }}-cache-spigot-
 
       - name: Save cache build works
         uses: actions/cache/save@v4
         with:
           path: work
-          key: ${{ runner.os }}-cache-build-work-${{ env.date }}
+          key: ${{ runner.os }}-cache-build-work-
