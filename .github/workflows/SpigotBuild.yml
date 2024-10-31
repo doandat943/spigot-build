@@ -20,7 +20,7 @@ jobs:
       - name: Fetch versions
         id: get-versions
         run: |
-          versions="[1.10.2, 1.17.1, 1.20.2]"
+          versions="X"
           echo "::set-output name=versions::${versions}"
 
       - name: Generate README.md
@@ -33,7 +33,7 @@ jobs:
     needs: get-versions
     strategy:
       matrix:
-        version: ${{ needs.get-versions.outputs.versions }}
+        version: [1.10.2, 1.17.1, 1.20.2]
 
     steps:
 
