@@ -52,7 +52,6 @@ jobs:
         mkdir -p output
         chmod +x ./build.sh
         chmod +x ./generate_version_table.sh
-      working-directory: buildtool
         
     - name: Set up JDK 21
       uses: actions/setup-java@v4
@@ -62,7 +61,6 @@ jobs:
         
     - name: Build Spigot version with Java 21
       run: ./build.sh JAVA21
-      working-directory: buildtool
       
     - name: Set up JDK 17
       uses: actions/setup-java@v4
@@ -72,7 +70,6 @@ jobs:
         
     - name: Build Spigot version with Java 17
       run: ./build.sh JAVA17
-      working-directory: buildtool
       
     - name: Set up JDK 8
       uses: actions/setup-java@v4
@@ -82,11 +79,9 @@ jobs:
         
     - name: Build Spigot version with Java 8
       run: ./build.sh JAVA8
-      working-directory: buildtool
       
     - name: Generate readme
-      run: ./generate_version_table.sh ${{ env.date }} output/README.md
-      working-directory: release
+      run: ./generate_version_table.sh ${{ env.date }} README.md
       
     - name: Push builds to release branch
       run: |
@@ -98,7 +93,6 @@ jobs:
         git add README.md
         git commit -m "${{ env.date }}"
         git push -f origin release
-      working-directory: release
       
     - name: Create Release
       uses: softprops/action-gh-release@v2
