@@ -90,7 +90,7 @@ jobs:
       run: mkdir -p release && mv buildtool/output/*.jar release/
       
     - name: Generate readme
-      run: ./generate_version_table.sh ${{ env.date }} README.md
+      run: ./buildtool/generate_version_table.sh ${{ env.date }} README.md
       working-directory: release
       
     - name: Push builds to release branch
