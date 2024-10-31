@@ -50,12 +50,12 @@ jobs:
     needs: get-versions
     strategy:
       matrix:
-        version: ${{ needs.generate_readme.outputs.versions}}
+        version: ${{ needs.get-versions.outputs.versions}}
 
     steps:
       - name: Set environment variable
         run: |
-          echo "date=${{ needs.generate_readme.outputs.date}}" >> $GITHUB_ENV
+          echo "date=${{ needs.get-versions.outputs.date}}" >> $GITHUB_ENV
 
           IFS='.' read -r major minor patch <<<"${{ matrix.version }}"
 
