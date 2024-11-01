@@ -43,7 +43,7 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
-    needs: get-versions
+    needs: push-readme
     strategy:
       matrix:
         version: ${{ fromJSON(needs.get-versions.outputs.versions) }}
