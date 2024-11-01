@@ -24,6 +24,8 @@ jobs:
 
   push-readme:
     runs-on: ubuntu-latest
+    outputs:
+      versions: ${{ needs.get-versions.outputs.versions }}
     needs: get-versions
     steps:
       - name: Checkout repository
