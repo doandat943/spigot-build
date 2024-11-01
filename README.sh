@@ -1,7 +1,7 @@
 declare -A version_families
 declare -A version_count
 
-for version in "${versions[@]}"; do
+for version in $versions; do
     IFS='.' read -r major minor patch <<<"$version"
     family="${major}.${minor}"
     version_families["$family"]+="$version "
