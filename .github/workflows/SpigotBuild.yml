@@ -32,7 +32,7 @@ jobs:
 
               if [[ ! " ${builds[@]} " =~ " ${build} " ]]; then
                   builds+=("$build")
-                  versions+=("$version")
+                  versions+="${version} "
               fi
           done
 
