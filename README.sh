@@ -1,5 +1,3 @@
-versions=($(curl -L -s https://hub.spigotmc.org/versions/ | grep -oP '(?<=href=")[^"]*' | grep -E '^[0-9]+\.[0-9]+(\.[0-9]+)?' | grep -v '-' | sed 's/.json//' | sort -V))
-
 declare -A version_families
 declare -A version_count
 
