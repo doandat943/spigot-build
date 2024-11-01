@@ -77,31 +77,6 @@ jobs:
           java-version: ${{ env.java }}
           distribution: "temurin"
 
-      - name: Restore cache .m2 folder
-        uses: actions/cache/restore@v4
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-cache-maven-
-          restore-keys: ${{ runner.os }}-cache-maven-
-
-      - name: Restore cache Spigot repos
-        uses: actions/cache/restore@v4
-        with:
-          path: |
-            apache-maven-*
-            Bukkit
-            CraftBukkit
-            Spigot
-          key: ${{ runner.os }}-cache-spigot-
-          restore-keys: ${{ runner.os }}-cache-spigot-
-
-      - name: Restore cache build works
-        uses: actions/cache/restore@v4
-        with:
-          path: work
-          key: ${{ runner.os }}-cache-build-work-
-          restore-keys: ${{ runner.os }}-cache-build-work-
-
       - name: Set up BuildTool
         run: |
           wget https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar -O BuildTools.jar
@@ -117,25 +92,3 @@ jobs:
           name: Spigot
           tag_name: Spigot
           files: output/*.jar
-
-      - name: Save cache .m2 folder
-        uses: actions/cache/save@v4
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-cache-maven-
-
-      - name: Save cache Spigot repos
-        uses: actions/cache/save@v4
-        with:
-          path: |
-            apache-maven-*
-            Bukkit
-            CraftBukkit
-            Spigot
-          key: ${{ runner.os }}-cache-spigot-
-
-      - name: Save cache build works
-        uses: actions/cache/save@v4
-        with:
-          path: work
-          key: ${{ runner.os }}-cache-build-work-
