@@ -36,8 +36,7 @@ jobs:
               fi
           done
 
-          json_versions=$(printf '%s\n' "${versions[@]}" | jq -R . | jq -s .)
-          echo "versions=${json_versions}" >> $GITHUB_OUTPUT
+          echo "versions=${versions}" >> $GITHUB_OUTPUT
 
       - name: Generate README.md
         run: |
