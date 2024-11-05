@@ -23,7 +23,8 @@ for version in $versions_raw; do
 done
 
 # Convert versions_to_build to JSON format
-echo "versions=$(printf '%s\n' "${versions_to_build[@]}" | jq -R . | jq -s -c .)" >> $GITHUB_OUTPUT
+versions_to_build_json=$(printf '%s\n' "${versions_to_build[@]}" | jq -R . | jq -s -c .)
+echo "json_versions=${versions_to_build_json}" >> $GITHUB_OUTPUT
 
 # Convert versions_to_build array to a comma-separated string with a space after each comma
 versions_to_build_readme=""
