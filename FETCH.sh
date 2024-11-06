@@ -1,6 +1,6 @@
 # Fetch versions from Spigot and builds in README.md
 versions_raw=$(curl -L -s https://hub.spigotmc.org/versions/ | grep -oP '(?<=href=")[^"]*' | grep -E '^[0-9]+\.[0-9]+(\.[0-9]+)?' | grep -v '-' | sed 's/.json//' | sort -V -r)
-readme_content=$(curl -L -s https://raw.githubusercontent.com/doandat943/spigot-build/refs/heads/main/README.md)
+readme_content=$(cat README.md)
 
 builds=()
 versions=()

@@ -76,8 +76,8 @@ jobs:
         
       - name: Fetch versions to build and generate README.md
         env:
-          builds: ${{needs.get-versions.outputs.versions_to_build}}
-          versions: ${{needs.get-versions.outputs.versions_to_build}}
+          builds: ${{needs.get-versions.outputs.builds}}
+          versions: ${{needs.get-versions.outputs.versions}}
           versions_to_build: ${{needs.get-versions.outputs.versions_to_build}}
         run: |
           chmod +x README.sh
