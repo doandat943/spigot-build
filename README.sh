@@ -1,7 +1,3 @@
-builds=$(echo "$builds" | jq -r '.[]' | paste -sd " " -)
-versions=$(echo "$versions" | jq -r '.[]' | paste -sd " " -)
-versions_to_build=$(echo "$versions_to_build" | jq -r '.[]' | paste -sd " " -)
-
 builds=($(echo "$builds" | jq -r '.[]'))
 versions=($(echo "$versions" | jq -r '.[]'))
 versions_to_build=($(echo "$versions_to_build" | jq -r '.[]'))
