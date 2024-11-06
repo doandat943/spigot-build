@@ -22,65 +22,10 @@ for version in $versions_raw; do
     fi
 done
 
-# Convert versions_to_build to JSON format
-json_versions_to_build=$(printf '%s\n' "${versions_to_build[@]}" | jq -R . | jq -s -c .)
-echo "versions=${json_versions_to_build}" >> $GITHUB_OUTPUT
-
-# Declare associative arrays for version families and counts
-declare -A version_families
-declare -A version_count
-
-# Populate version families and counts
-for i in "${!versions[@]}"; do
-    version="${versions[i]}"
-    build="${builds[i]}"
-    IFS='.' read -r major minor patch <<<"$version"
-    family="${major}.${minor}"
-    version_families["$family"]+="$version:$build "
-    version_count["$family"]=$((version_count["$family"] + 1))
-done
-
-# Determine max versions in any family
-max_versions=0
-for count in "${version_count[@]}"; do
-    if [ "$count" -gt "$max_versions" ]; then
-        max_versions=$count
-    fi
-done
-
-# Create Markdown header
-header="| Version Family |"
-for ((i = 0; i < max_versions; i++)); do
-    header+=" |"
-done
-echo "$header" > README.md
-
-# Separator
-separator="|:---:"
-for ((i = 0; i < max_versions; i++)); do
-    separator+="|:---:"
-done
-separator+="|"
-echo "$separator" >> README.md
-
-# Populate Markdown table with versions and builds
-for family in $(echo "${!version_families[@]}" | tr ' ' '\n' | sort -V -r); do
-    echo -n "| $family " >> README.md
-
-    versions_in_family=(${version_families["$family"]})
-    count=0
-    for version_build in "${versions_in_family[@]}"; do
-        version="${version_build%:*}"
-        build="${version_build#*:}"
-        echo -n "| [${version}](https://github.com/doandat943/spigot-build/releases/download/Spigot/spigot-${version}.jar) (${build}) " >> README.md
-        count=$((count + 1))
-    done
-
-    # Fill remaining cells
-    while [ "$count" -lt "$max_versions" ]; do
-        echo -n "| " >> README.md
-        count=$((count + 1))
-    done
-
-    echo "|" >> README.md
-done
+# Convert output to JSON format
+builds=$(printf '%s\n' "${builds[@]}" | jq -R . | jq -s -c .)
+versions=$(printf '%s\n' "${versions[@]}" | jq -R . | jq -s -c .)
+versions_to_build=$(printf '%s\n' "${versions_to_build[@]}" | jq -R . | jq -s -c .)
+echo "builds=${builds}" >> $GITHUB_OUTPUT
+echo "versions=${versions}" >> $GITHUB_OUTPUT
+echo "versions_to_build=${versions_to_build}" >> $GITHUB_OUTPUT
