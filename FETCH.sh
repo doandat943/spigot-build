@@ -24,7 +24,7 @@ done
 
 # Convert versions_to_build to JSON format
 json_versions_to_build=$(printf '%s\n' "${versions_to_build[@]}" | jq -R . | jq -s -c .)
-echo "json_versions=${json_versions_to_build}"
+echo "versions=${json_versions_to_build}" >> $GITHUB_OUTPUT
 
 # Declare associative arrays for version families and counts
 declare -A version_families
