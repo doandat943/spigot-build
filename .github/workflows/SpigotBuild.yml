@@ -24,32 +24,12 @@ jobs:
           chmod +x FETCH.sh
           ./FETCH.sh
 
-      - name: Upload README.md to release
-        if: needs.fetch_versions.outputs.versions_to_build_json != ''
-        uses: softprops/action-gh-release@v2
-        with:
-          name: Spigot
-          tag_name: Spigot
-          body_path: README.md
-
-      - name: Push builds to release branch
-        if: needs.fetch_versions.outputs.versions_to_build_json != ''
-        run: |
-          (echo -e "# Spigot Build\n\nThis project provides an automated build of Spigot Minecraft Server, scheduled to build every days.\n\nThe latest build is available in [release](https://github.com/doandat943/spigot-build/releases/latest).\n\n"; cat README.md) > temp_file && mv temp_file README.md
-          git config user.name "github-actions"
-          git config user.email "41898282+github-actions@users.noreply.github.com"
-          git add README.md
-          git commit -m "Update ${{ env.date }} to latest build"
-          git push
-
   build:
     runs-on: ubuntu-latest
     needs: get-versions
-    if: needs.fetch_versions.outputs.versions_to_build_json != ''
     strategy:
       matrix:
-        version: ${{ fromJSON(needs.fetch_versions.outputs.versions) }}
-
+        version: ${{ fromJSON(needs.get-versions.outputs.versions) }}
     steps:
       - name: Set environment variable
         run: |
@@ -83,3 +63,25 @@ jobs:
           name: Spigot
           tag_name: Spigot
           files: output/*.jar
+
+  readme:
+    runs-on: ubuntu-latest
+    needs: get-versions
+    steps:
+      - name: Upload README.md to release
+        if: needs.fetch_versions.outputs.versions_to_build_json != ''
+        uses: softprops/action-gh-release@v2
+        with:
+          name: Spigot
+          tag_name: Spigot
+          body_path: README.md
+
+      - name: Push builds to release branch
+        if: needs.fetch_versions.outputs.versions_to_build_json != ''
+        run: |
+          (echo -e "# Spigot Build\n\nThis project provides an automated build of Spigot Minecraft Server, scheduled to build every days.\n\nThe latest build is available in [release](https://github.com/doandat943/spigot-build/releases/latest).\n\n"; cat README.md) > temp_file && mv temp_file README.md
+          git config user.name "github-actions"
+          git config user.email "41898282+github-actions@users.noreply.github.com"
+          git add README.md
+          git commit -m "Update ${{ env.date }} to latest build"
+          git push

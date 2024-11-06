@@ -23,17 +23,8 @@ for version in $versions_raw; do
 done
 
 # Convert versions_to_build to JSON format
-versions_to_build_json=$(printf '%s\n' "${versions_to_build[@]}" | jq -R . | jq -s -c .)
-echo "json_versions=${versions_to_build_json}" >> $GITHUB_OUTPUT
-
-# Convert versions_to_build array to a comma-separated string with a space after each comma
-versions_to_build_readme=""
-for version in "${versions_to_build[@]}"; do
-    versions_to_build_readme+="$version, "
-done
-versions_to_build_readme=${versions_to_build_readme%, }
-
-echo "versions_to_build_readme=$(printf '%s\n' "${versions_to_build_readme[@]}" | jq -R . | jq -s -c .)" >> $GITHUB_ENV
+json_versions_to_build=$(printf '%s\n' "${versions_to_build[@]}" | jq -R . | jq -s -c .)
+echo "json_versions=${json_versions_to_build}"
 
 # Declare associative arrays for version families and counts
 declare -A version_families
