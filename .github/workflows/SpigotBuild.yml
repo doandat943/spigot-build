@@ -10,7 +10,7 @@ permissions:
   contents: write
 
 jobs:
-  get-versions:
+  fetch_versions:
     runs-on: ubuntu-latest
     outputs:
       builds: ${{ steps.fetch_versions.outputs.builds }}
@@ -28,11 +28,11 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
-    needs: get-versions
-    if: needs.get-versions.outputs.versions_to_build != ''
+    needs: fetch_versions
+    if: needs.fetch_versions.outputs.versions_to_build != ''
     strategy:
       matrix:
-        version: ${{ fromJSON(needs.get-versions.outputs.versions_to_build) }}
+        version: ${{ fromJSON(needs.fetch_versions.outputs.versions_to_build) }}
     steps:
       - name: Set environment variable
         run: |
@@ -69,16 +69,16 @@ jobs:
 
   readme:
     runs-on: ubuntu-latest
-    needs: [get-versions, build]
+    needs: [fetch_versions, build]
+    env:
+      builds: ${{needs.fetch_versions.outputs.builds}}
+      versions: ${{needs.fetch_versions.outputs.versions}}
+      versions_to_build: ${{needs.fetch_versions.outputs.versions_to_build}}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        
-      - name: Fetch versions to build and generate README.md
-        env:
-          builds: ${{needs.get-versions.outputs.builds}}
-          versions: ${{needs.get-versions.outputs.versions}}
-          versions_to_build: ${{needs.get-versions.outputs.versions_to_build}}
+
+      - name: Fetch versions to README.md
         run: |
           chmod +x README.sh
           ./README.sh
@@ -90,11 +90,11 @@ jobs:
           tag_name: Spigot
           body_path: README.md
 
-      - name: Push builds to release branch
+      - name: Update README.md to main branch
         run: |
           (echo -e "# Spigot Build\n\nThis project provides an automated build of Spigot Minecraft Server, scheduled to build every days.\n\nThe latest build is available in [release](https://github.com/doandat943/spigot-build/releases/latest).\n\n"; cat README.md) > temp_file && mv temp_file README.md
           git config user.name "github-actions"
           git config user.email "41898282+github-actions@users.noreply.github.com"
           git add README.md
-          git commit -m "Update to latest build"
+          git commit -m "Update $(echo "$versions_to_build" | jq -r '. | join(", ")') to latest build"
           git push
